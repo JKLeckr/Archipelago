@@ -1,15 +1,16 @@
 # CupheadArchipelago World TODO
 
 ### Current things
+- [ ] Make boss defeat items event items instead (Will have to consider the issue of making those locations have checks or not)
 - [ ] Implement Boat and DLC Mechanism
+- [ ] Randomize Abilities
 
 ### Planned things
 - [ ] Sort difficult and impossible weapons for weapon logic with levels.
-- [ ] Randomize Abilities
 - [ ] Weapon Gate
 
 ### Known Issues
-(Empty)
+(None)
 
 ### Done
 - [X] Implement Freemove Isles
