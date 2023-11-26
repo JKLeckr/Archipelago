@@ -12,7 +12,7 @@
 - [ ] Weapon Gate
 
 ### Known Issues
-(None)
+(Too many)
 
 ### Done
 - [X] Implement Freemove Isles
