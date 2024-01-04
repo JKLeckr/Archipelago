@@ -1,11 +1,10 @@
 # CupheadArchipelago World TODO
 
 ### Current things
-- [ ] Replace start_inventory modifications with self.multiworld.push_precollected
-- [ ] Fix the breaking changes
-- [ ] Make boss defeat items event items instead (Will have to consider the issue of making those locations have checks or not)
+- [ ] Replace start_inventory modifications with self.multiworld.push_precollected ?
 - [ ] Implement Boat and DLC Mechanism
 - [ ] Randomize Abilities
+- [ ] Make it an option to enable or disable level coin collection behavior
 
 ### Planned things
 - [ ] Sort difficult and impossible weapons for weapon logic with levels.
