@@ -1,10 +1,11 @@
 # CupheadArchipelago World TODO
 
 ### Current things
-- [ ] Replace start_inventory modifications with self.multiworld.push_precollected ?
+- [ ] Make Unit Tests
+- [ ] Proper start_inventory handling
 - [ ] Implement Boat and DLC Mechanism
 - [ ] Randomize Abilities
-- [ ] Implement more foolproof shop mechanism + item handling when there are more items than locations
+- [ ] Item handling when there are more items than locations
 
 ### Planned things
 - [ ] Sort difficult and impossible weapons for weapon logic with levels.
@@ -17,3 +18,4 @@
 ### Done
 - [X] Implement Freemove Isles
 - [X] Implement Chaliced things
+- [X] Implement more foolproof shop mechanism

@@ -163,7 +163,7 @@ class CupheadWorld(World):
         rand = self.random
         itempool: list[CupheadItem] = []
 
-        #TODO: Handle start_inventory correctly
+        #TODO: Handle start_inventory
 
         #starter_items.append(self.create_item(ItemNames.item_charm_heart))
         #print(len(starter_items))
