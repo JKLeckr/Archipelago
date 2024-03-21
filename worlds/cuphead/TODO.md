@@ -11,6 +11,7 @@
 - [ ] Weapon Gate
 
 ### Known Issues
+- [ ] Fix level shuffle issues
 (Too many)
 
 ### Done
