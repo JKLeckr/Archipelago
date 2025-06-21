@@ -21,10 +21,10 @@ import Utils
 if __name__ == "__main__":
     Utils.init_logging("TextClient", exception_logger="Client")
 
-from MultiServer import CommandProcessor
+from MultiServer import CommandProcessor, mark_raw
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus, SlotType)
-from Utils import Version, stream_input, async_start
+from Utils import Version, stream_input, async_start, get_fuzzy_results
 from worlds import network_data_package, AutoWorldRegister
 import os
 import ssl
@@ -174,6 +174,74 @@ class ClientCommandProcessor(CommandProcessor):
             state = ClientStatus.CLIENT_CONNECTED
             self.output("Unreadied.")
         async_start(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
+    
+    @mark_raw
+    def _cmd_search_item(self, item_query: str) -> bool:
+        """Use !search_item {item_query},
+        for example !seach_item Key gets all item names in the world that matches \"Key\""""
+        slot = self.ctx.slot
+        if slot:
+            item_query = item_query.strip()
+            game = self.ctx.game
+
+            # Hard limit to not flood the console.
+            limit = 50
+
+            # Hardcoded excluded names never to show in results.
+            exclude_names = {"Everything"}
+
+            if not game:
+                self.output("No game set, cannot determine existing items.")
+                return False
+            
+            item_groups = AutoWorldRegister.world_types[game].item_name_groups
+            item_name_to_id = AutoWorldRegister.world_types[game].item_name_to_id
+            item_names_and_groups = set(item_groups.keys()).union(set(item_name_to_id.keys()))
+            _items_names = self.ctx.item_names
+
+            # Return the fuzzy results for query
+            results = get_fuzzy_results(item_query, item_names_and_groups, limit)
+
+            # Make query pieces. These pieces are key to making the results output manageable, but helpful.
+            # This works by splitting the query into lowercase words without symbols, then check if those
+            # words are in the the fuzzy result to determine whether to show it or not.
+            # For example: Searching "Black Key" will return results with both "black" and "key" without
+            # requiring the exact phrase "Black Key". An example result would be "Key Black".
+            query_pieces = "".join([c for c in item_query.lower() if c.isalnum() or c.isspace()]).split(" ")
+
+            got_results = False
+
+            if results:
+                # Iterate through results
+                for item, percent in results:
+                    # Only include names that contain the query string and skip items in excluded_names
+                    if item not in exclude_names and all(query_piece in item.lower() for query_piece in query_pieces):
+                        # Format percent to be Exact if it is 101%, Case-Insensitive (CI) Exact if it is 100%, or just percent for anything else.
+                        _percent = (
+                            "Exact" if percent >= 101 else "CI Exact" if percent >= 100 else f"{percent}%"
+                        )
+                        # If item is group show group else show item
+                        if item in item_groups:
+                            self.output(f"Group: {item} ({_percent})")
+                            # Show items in that group if this is true.
+                            if percent >= 100:
+                                for item_name_from_group in item_groups[item]:
+                                    if _items_names.lookup_in_game(item_name_to_id[item_name_from_group]):  # all items in group
+                                        self.output(f"- {item_name_from_group}")
+                            got_results = True
+                        elif _items_names.lookup_in_game(item_name_to_id[item]):  # Item results
+                            self.output(f"Item: {item} ({_percent})")
+                            got_results = True
+
+            # If results got sent to output.
+            if got_results:
+                return True
+            else:
+                self.output("No Results")
+                return False
+        else:
+            self.output("Invalid slot")
+            return False
 
     def default(self, raw: str):
         """The default message parser to be used when parsing any messages that do not match a command"""
