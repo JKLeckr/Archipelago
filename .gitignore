@@ -121,6 +121,9 @@ coverage.xml
 .pytest_cache/
 cover/
 
+# aider
+.aider*
+map.md
 
 # Flask stuff:
 instance/
