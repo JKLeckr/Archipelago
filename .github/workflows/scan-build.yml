@@ -1,5 +1,6 @@
 name: Native Code Static Analysis
 
+# Disabled on this branch: build is disabled.
 on:
   push:
     paths:
@@ -32,6 +33,7 @@ permissions: {}
 
 jobs:
   scan-build:
+    if: ${{ false }}
     runs-on: ubuntu-latest
 
     steps:
