@@ -4,6 +4,9 @@
 include = ["**/*.py"]
 exclude = ["**/__pycache__"]
 
+[analysis]
+respect-type-ignore-comments = false
+
 [rules]
 missing-override-decorator = "error"
 deprecated = "error"
