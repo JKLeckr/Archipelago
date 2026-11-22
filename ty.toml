@@ -11,7 +11,7 @@ respect-type-ignore-comments = false
 missing-override-decorator = "error"
 deprecated = "error"
 missing-type-argument = "error"
-unresolved-import = "error"
+import-not-found = "error"
 #unsound-return-statement = "error"
 possibly-unresolved-reference = "warn"
 
